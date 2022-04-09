@@ -66,7 +66,7 @@ local function EnterApartment(house, apartmentId, new)
                 CurrentOffset = newoffset
                 TriggerServerEvent("apartments:server:AddObject", apartmentId, house, CurrentOffset)
                 local coords = { x = Apartments.Locations[house].coords.enter.x, y = Apartments.Locations[house].coords.enter.y, z = Apartments.Locations[house].coords.enter.z - CurrentOffset}
-                data = exports['qb-interior']:CreateApartmentFurnished(coords)
+                data = exports['qb-interior']:CreateFurniMotelStandard(coords)
                 Wait(100)
                 houseObj = data[1]
                 POIOffsets = data[2]
@@ -89,7 +89,7 @@ local function EnterApartment(house, apartmentId, new)
             TriggerServerEvent("InteractSound_SV:PlayOnSource", "houses_door_open", 0.1)
             TriggerServerEvent("apartments:server:AddObject", apartmentId, house, CurrentOffset)
             local coords = { x = Apartments.Locations[ClosestHouse].coords.enter.x, y = Apartments.Locations[ClosestHouse].coords.enter.y, z = Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset}
-            data = exports['qb-interior']:CreateApartmentFurnished(coords)
+            data = exports['qb-interior']:CreateFurniMotelStandard(coords)
             Wait(100)
             houseObj = data[1]
             POIOffsets = data[2]
@@ -358,10 +358,10 @@ CreateThread(function()
                 local headerMenu = {}
                 local inRange = false
                 local pos = GetEntityCoords(PlayerPedId())
-                local entrancedist = #(pos - vector3(Apartments.Locations[ClosestHouse].coords.enter.x - POIOffsets.exit.x, Apartments.Locations[ClosestHouse].coords.enter.y - POIOffsets.exit.y, Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset + POIOffsets.exit.z))
-                local stashdist = #(pos - vector3(Apartments.Locations[ClosestHouse].coords.enter.x - POIOffsets.stash.x, Apartments.Locations[ClosestHouse].coords.enter.y - POIOffsets.stash.y, Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset + POIOffsets.stash.z))
-                local outfitsdist = #(pos - vector3(Apartments.Locations[ClosestHouse].coords.enter.x - POIOffsets.clothes.x, Apartments.Locations[ClosestHouse].coords.enter.y - POIOffsets.clothes.y, Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset + POIOffsets.clothes.z))
-                local logoutdist = #(pos - vector3(Apartments.Locations[ClosestHouse].coords.enter.x - POIOffsets.logout.x, Apartments.Locations[ClosestHouse].coords.enter.y + POIOffsets.logout.y, Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset + POIOffsets.logout.z))
+                local entrancedist = #(pos - vector3(Apartments.Locations[ClosestHouse].coords.enter.x + POIOffsets.exit.x, Apartments.Locations[ClosestHouse].coords.enter.y + POIOffsets.exit.y, Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset + POIOffsets.exit.z))
+                local stashdist = #(pos - vector3(Apartments.Locations[ClosestHouse].coords.enter.x + POIOffsets.stash.x, Apartments.Locations[ClosestHouse].coords.enter.y + POIOffsets.stash.y, Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset + POIOffsets.stash.z))
+                local outfitsdist = #(pos - vector3(Apartments.Locations[ClosestHouse].coords.enter.x + POIOffsets.clothes.x, Apartments.Locations[ClosestHouse].coords.enter.y + POIOffsets.clothes.y, Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset + POIOffsets.clothes.z))
+                local logoutdist = #(pos - vector3(Apartments.Locations[ClosestHouse].coords.enter.x + POIOffsets.logout.x, Apartments.Locations[ClosestHouse].coords.enter.y + POIOffsets.logout.y, Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset + POIOffsets.logout.z))
 
                 -- Enter
                 if CurrentDoorBell ~= 0 then
@@ -388,9 +388,9 @@ CreateThread(function()
                         }
                     }
                 elseif entrancedist <= 3 then
-                    local x = Apartments.Locations[ClosestHouse].coords.enter.x - POIOffsets.exit.x
-                    local y = Apartments.Locations[ClosestHouse].coords.enter.y - POIOffsets.exit.y
-                    local z = Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset + POIOffsets.exit.z
+                    local x = Apartments.Locations[ClosestHouse].coords.enter.x + POIOffsets.exit.x
+                    local y = Apartments.Locations[ClosestHouse].coords.enter.y + POIOffsets.exit.y
+                    local z = Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset + POIOffsets.exit.z + 1
                     DrawMarker(2, x, y, z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 200, 0, 0, 222, false, false, false, true, false, false, false)
                 end
 
@@ -406,9 +406,9 @@ CreateThread(function()
                         }
                     }
                 elseif stashdist <= 3 then
-                    local x = Apartments.Locations[ClosestHouse].coords.enter.x - POIOffsets.stash.x
-                    local y = Apartments.Locations[ClosestHouse].coords.enter.y - POIOffsets.stash.y
-                    local z = Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset + POIOffsets.stash.z + 1.0
+                    local x = Apartments.Locations[ClosestHouse].coords.enter.x + POIOffsets.stash.x
+                    local y = Apartments.Locations[ClosestHouse].coords.enter.y + POIOffsets.stash.y
+                    local z = Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset + POIOffsets.stash.z + 0.5
                     DrawMarker(2, x, y, z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 200, 0, 0, 222, false, false, false, true, false, false, false)
                 end
 
@@ -423,9 +423,9 @@ CreateThread(function()
                         }
                     }
                 elseif outfitsdist <= 3 then
-                    local x = Apartments.Locations[ClosestHouse].coords.enter.x - POIOffsets.clothes.x
-                    local y = Apartments.Locations[ClosestHouse].coords.enter.y - POIOffsets.clothes.y
-                    local z = Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset + POIOffsets.clothes.z
+                    local x = Apartments.Locations[ClosestHouse].coords.enter.x + POIOffsets.clothes.x
+                    local y = Apartments.Locations[ClosestHouse].coords.enter.y + POIOffsets.clothes.y
+                    local z = Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset + POIOffsets.clothes.z + 1.0
                     DrawMarker(2, x, y, z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 200, 0, 0, 222, false, false, false, true, false, false, false)
                 end
 
@@ -440,7 +440,7 @@ CreateThread(function()
                         }
                     }
                 elseif logoutdist <= 3 then
-                    local x = Apartments.Locations[ClosestHouse].coords.enter.x - POIOffsets.logout.x
+                    local x = Apartments.Locations[ClosestHouse].coords.enter.x + POIOffsets.logout.x
                     local y = Apartments.Locations[ClosestHouse].coords.enter.y + POIOffsets.logout.y
                     local z = Apartments.Locations[ClosestHouse].coords.enter.z - CurrentOffset + POIOffsets.logout.z
                     DrawMarker(2, x, y, z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 200, 0, 0, 222, false, false, false, true, false, false, false)
